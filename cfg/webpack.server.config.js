@@ -15,10 +15,28 @@ module.exports = {
     },
     externals: [nodeExternals()],
     module: {
-        rules: [{
-            test: /\.[tj]sx?$/,
-            use: ['ts-loader']
-        }]
+        rules: [
+            {
+                test: /\.[tj]sx?$/,
+                use: ['ts-loader']
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                mode: 'local',
+                                localIdentName: '[name]__[local]--[hash:base64:5]',
+                            },
+                            onlyLocals: true,//чтобы лоадер не собирал глобальные стили на сервере. На сервере стили не нужны, главное только селекторы.
+                        }
+                    },
+                'less-loader',
+                ],
+            }
+        ]
     },
     optimization: {
         minimize: false, //отключить минимизацию

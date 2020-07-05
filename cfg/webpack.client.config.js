@@ -29,12 +29,27 @@ module.exports = {
         publicPath: "/static/",//путь по кот б доступны наши статические ассеты chunks с файлами для hrm
     },
     module: {
-        rules: [{
-            test: /\.[tj]sx?$/,
-            use: {
-                loader: 'ts-loader',
+        rules: [
+            {
+                test: /\.[tj]sx?$/,
+                use: ['ts-loader']//встраивание с пом него в бандл.
+            },
+            {
+                test: /\.less$/,
+                use: [//действие справа налево, сначала less потом css потом style, потом сверху в бандл.
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                mode: 'local',
+                                localIdentName: '[name]__[local]--[hash:base64:5]',//маркировка сгенерированных стилей
+                            }
+                        }
+                    },
+                    'less-loader',
+                ],
             }
-        },
         ]
     },
     devtool: setupDevtool(),
